@@ -1,0 +1,1 @@
+"""Sphinx extension handler module."""
