@@ -31,6 +31,11 @@ dependencies = [
 dynamic = ["version", "description"]
 
 [project.optional-dependencies]
+# Extras
+sphinx = [
+    "sphinx",
+]
+# Developments
 test = [
     "pygments",
     "pytest ~=7.2.0",
