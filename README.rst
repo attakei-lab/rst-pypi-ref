@@ -24,6 +24,9 @@ Installation
 Usage
 =====
 
+When you write ``:pypi:`rst-pypi-ref``` into reStructuredText source,
+this appends ref to PyPI URL for ``rst-pypi-ref``.
+
 Simple usage
 ------------
 
@@ -43,3 +46,14 @@ With Sphinx
    extensions = [
        "rst_pypi_ref.sphinx",
    ]
+
+For other docutils app
+----------------------
+
+In entrypoint (before parse reST source), Call ``rst_pypi_ref.core.bootstrap``.
+
+.. code-block:: python
+
+   from rst_pypi_ref.core import bootstrap
+
+   bootstrap()
