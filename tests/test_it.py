@@ -7,4 +7,4 @@ def test_pypi_reference_role():
     )
     assert len(nodes) == 1
     node = nodes[0]
-    assert node["refuri"] == "https://pypi.org/project/docutils"
+    assert node["refuri"] == "https://pypi.org/project/docutils/"

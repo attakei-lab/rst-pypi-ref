@@ -17,7 +17,7 @@ def pypi_reference_role(
     """Parse ``pypi`` role."""
     options = roles.normalized_role_options(options)
     messages = []
-    url = f"https://pypi.org/project/{text}"
+    url = f"https://pypi.org/project/{text}/"
     return [nodes.reference(rawtext, text, refuri=url, **options)], messages
 
 
