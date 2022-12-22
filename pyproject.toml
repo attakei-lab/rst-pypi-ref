@@ -6,6 +6,7 @@ build-backend = "flit_core.buildapi"
 name = "rst-pypi-ref"
 authors = [{name = "Kazuya Takei", email = "myself@attakei.net"}]
 license = {file = "LICENSE"}
+readme = "README.rst"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Framework :: Sphinx",
