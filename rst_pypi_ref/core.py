@@ -6,6 +6,16 @@ from docutils.parsers.rst import roles
 from docutils.parsers.rst.states import Inliner
 
 
+def build_package_url(fullname: str) -> str:
+    """Build ref URL for package fullname after parsed."""
+    spec = fullname.split("==")
+    name = spec[0]
+    url = f"https://pypi.org/project/{name}/"
+    if len(spec) > 1:
+        url += f"{spec[1]}/"
+    return url
+
+
 def pypi_reference_role(
     role: str,
     rawtext: str,
@@ -18,7 +28,7 @@ def pypi_reference_role(
     """Parse ``pypi`` role."""
     options = roles.normalized_role_options(options)
     messages = []
-    url = f"https://pypi.org/project/{text}/"
+    url = build_package_url(text)
     return [nodes.reference(rawtext, text, refuri=url, **options)], messages
 
 
