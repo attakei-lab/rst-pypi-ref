@@ -2,6 +2,16 @@
 Changelog
 =========
 
+ver 0.2.0
+=========
+
+:date: 2023-04-09
+
+Features
+--------
+
+* When text value includes '==', ref URL is versiond.
+
 ver 0.1.1
 =========
 
