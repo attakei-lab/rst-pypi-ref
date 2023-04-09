@@ -2,7 +2,8 @@
 from typing import List, Optional
 
 from docutils import nodes
-from docutils.parsers.rst import roles, states
+from docutils.parsers.rst import roles
+from docutils.parsers.rst.states import Inliner
 
 
 def pypi_reference_role(
@@ -10,7 +11,7 @@ def pypi_reference_role(
     rawtext: str,
     text: str,
     lineno: int,
-    inliner: states.Inliner,
+    inliner: Inliner,
     options: Optional[dict] = None,
     content: Optional[List[str]] = None,
 ):
