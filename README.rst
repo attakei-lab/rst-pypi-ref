@@ -27,6 +27,15 @@ Usage
 When you write ``:pypi:`rst-pypi-ref``` into reStructuredText source,
 this appends ref to PyPI URL for ``rst-pypi-ref``.
 
+Supporting syntax
+-----------------
+
+* Package name only: ``:pypi:`rst-pypi-ref```
+* Explicit version: ``:pypi:`rst-pypi-ref==0.2.0```
+* Change display text: ``:pypi:`PyPI Link <rst-pypi-ref>```
+
+  * There package name in between ``<`` and ``>``.
+
 Simple usage
 ------------
 
