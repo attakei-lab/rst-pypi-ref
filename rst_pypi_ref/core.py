@@ -1,4 +1,5 @@
 """Core module."""
+import re
 from typing import List, Optional
 
 from docutils import nodes
@@ -28,8 +29,13 @@ def pypi_reference_role(
     """Parse ``pypi`` role."""
     options = roles.normalized_role_options(options)
     messages = []
-    url = build_package_url(text)
-    return [nodes.reference(rawtext, text, refuri=url, **options)], messages
+    title = target = text
+    matched = re.match(r"^(?P<title>.+) <(?P<target>.+)>$", text)
+    if matched:
+        title = matched.group("title")
+        target = matched.group("target")
+    url = build_package_url(target)
+    return [nodes.reference(rawtext, title, refuri=url, **options)], messages
 
 
 def bootstrap():
