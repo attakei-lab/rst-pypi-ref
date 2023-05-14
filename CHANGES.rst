@@ -2,6 +2,16 @@
 Changelog
 =========
 
+ver 0.3.0
+=========
+
+:date: 2023-05-15 (JST)
+
+Features
+--------
+
+* Support "title and target" style (see README).
+
 ver 0.2.0
 =========
 
