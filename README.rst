@@ -66,3 +66,8 @@ In entrypoint (before parse reST source), Call ``rst_pypi_ref.core.bootstrap``.
    from rst_pypi_ref.core import bootstrap
 
    bootstrap()
+
+Contibuting
+===========
+
+See `CONTIBUTING note <https://github.com/attakei-lab/rst-pypi-ref/blob/main/CONTRIBUTING.rst>`_.
