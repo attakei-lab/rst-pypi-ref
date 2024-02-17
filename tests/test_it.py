@@ -1,3 +1,7 @@
+"""Test cases for core behaiviors."""
+from docutils import nodes
+from docutils.core import publish_doctree
+
 from rst_pypi_ref import core
 
 
@@ -27,3 +31,23 @@ class TestForBuildPackageUrl:
     def test_with_version(self):
         url = core.build_package_url("docutils==0.1.0")
         assert url == "https://pypi.org/project/docutils/0.1.0/"
+
+
+class TestForParse:
+    def test_simple_name_only(self):
+        from docutils import nodes
+
+        core.bootstrap()
+
+        doctree: nodes.document = publish_doctree(":pypi:`docutils`")
+        refs = list(doctree.findall(nodes.reference))
+        assert len(refs) == 1
+        assert refs[0]["refuri"] == "https://pypi.org/project/docutils/"
+
+    def test_simple_with_version(self):
+        core.bootstrap()
+
+        doctree: nodes.document = publish_doctree(":pypi:`docutils==0.3`")
+        refs = list(doctree.findall(nodes.reference))
+        assert len(refs) == 1
+        assert refs[0]["refuri"] == "https://pypi.org/project/docutils/0.3/"
