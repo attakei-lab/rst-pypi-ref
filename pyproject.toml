@@ -36,15 +36,17 @@ dynamic = ["version", "description"]
 sphinx = [
     "sphinx",
 ]
-# Developments
-test = [
-    "pygments",
-    "pytest ~=7.2.0",
-]
 
 [project.urls]
 Home = "https://github.com/attakei-lab/rst-pypi-ref"
 Repository = "https://github.com/attakei-lab/rst-pypi-ref"
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "pygments>=2.17.2",
+    "pytest~=7.2.0",
+]
 
 [tool.flit.module]
 name = "rst_pypi_ref"
