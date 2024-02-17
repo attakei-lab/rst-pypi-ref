@@ -2,6 +2,16 @@
 Changelog
 =========
 
+ver 0.3.1
+=========
+
+:date: 2024-02-18 (Asia/Tokyo)
+
+* Sources are not updated
+* Drop Python 3.7 and 3.8 from support versions
+* Add Python 3.12 into support versions
+* Use Rye, Ruff and uv
+
 ver 0.3.0
 =========
 
