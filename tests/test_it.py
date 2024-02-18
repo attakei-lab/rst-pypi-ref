@@ -44,6 +44,40 @@ class TestForProject:
         project = core.Project(name="docutils", version="0.1.0")
         assert project.url == "https://pypi.org/project/docutils/0.1.0/"
 
+    @pytest.mark.parametrize(
+        "name,version,verify_options,result_len",
+        [
+            ("docutils", None, core.VerifyOptions(), 0),
+            ("docutils", None, core.VerifyOptions(strict_version=True), 0),
+            ("docutils", None, core.VerifyOptions(ref_pypi_site=True), 0),
+            ("docutils", None, core.VerifyOptions(True, True), 0),
+            ("docutils", "0.3", core.VerifyOptions(), 0),
+            ("docutils", "0.3", core.VerifyOptions(strict_version=True), 0),
+            ("docutils", "0.3", core.VerifyOptions(ref_pypi_site=True), 0),
+            ("docutils", "0.3", core.VerifyOptions(True, True), 0),
+            ("docutils", "invalid", core.VerifyOptions(), 0),
+            ("docutils", "invalid", core.VerifyOptions(strict_version=True), 1),
+            ("docutils", "invalid", core.VerifyOptions(ref_pypi_site=True), 1),
+            ("docutils", "invalid", core.VerifyOptions(True, True), 2),
+            ("z", None, core.VerifyOptions(), 0),
+            ("z", None, core.VerifyOptions(strict_version=True), 0),
+            ("z", None, core.VerifyOptions(ref_pypi_site=True), 1),
+            ("z", None, core.VerifyOptions(True, True), 1),
+            ("z", "0.1", core.VerifyOptions(), 0),
+            ("z", "0.1", core.VerifyOptions(strict_version=True), 0),
+            ("z", "0.1", core.VerifyOptions(ref_pypi_site=True), 1),
+            ("z", "0.1", core.VerifyOptions(True, True), 1),
+            ("z", "invalid", core.VerifyOptions(), 0),
+            ("z", "invalid", core.VerifyOptions(strict_version=True), 1),
+            ("z", "invalid", core.VerifyOptions(ref_pypi_site=True), 1),
+            ("z", "invalid", core.VerifyOptions(True, True), 2),
+        ],
+    )
+    def test_verify(self, name, version, verify_options, result_len):
+        project = core.Project(name=name, version=version)
+        messages = project.verify(verify_options)
+        assert len(messages) == result_len
+
 
 class TestForParse:
     def setup_method(self):
