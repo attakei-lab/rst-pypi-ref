@@ -1,4 +1,5 @@
 """Test cases for core behaiviors."""
+import pytest
 from docutils import nodes
 from docutils.core import publish_doctree
 
@@ -23,6 +24,15 @@ class TestForPyPiReferenceRole:
         assert len(nodes) == 1
         node = nodes[0]
         assert node["refuri"] == "https://pypi.org/project/docutils/"
+
+    def test_name_with_ref_pypi_site(self):
+        options = core.VerifyOptions(ref_pypi_site=True)
+        pypi_reference_role = core.pypi_reference_role(options)
+        with pytest.warns(UserWarning):
+            nodes, messages = pypi_reference_role("pypi", ":pypi:`z`", "z", 0, None)
+        assert len(nodes) == 1
+        node = nodes[0]
+        assert node["refuri"] == "https://pypi.org/project/z/"
 
 
 class TestForProject:

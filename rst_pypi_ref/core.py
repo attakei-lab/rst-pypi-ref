@@ -3,6 +3,8 @@ import re
 import warnings
 from dataclasses import dataclass
 from typing import List, Optional
+from urllib.error import HTTPError
+from urllib.request import Request, urlopen
 
 from docutils import nodes
 from docutils.parsers.rst import roles
@@ -30,6 +32,18 @@ class Project:
             url += f"{self.version}/"
         return url
 
+    def verify(self, options: "VerifyOptions") -> List[str]:
+        result = []
+        if options.ref_pypi_site:
+            try:
+                msg = f"'{self}' is not found in PyPI."
+                resp = urlopen(Request(self.url, method="HEAD"))
+                if resp.status != 200:
+                    result.append(msg)
+            except HTTPError:
+                result.append(msg)
+        return result
+
 
 @dataclass
 class VerifyOptions:
@@ -39,7 +53,7 @@ class VerifyOptions:
     """Strict verify from PyPI site (check if exists)."""
 
 
-def pypi_reference_role(options: VerifyOptions) -> callable:
+def pypi_reference_role(verify_options: VerifyOptions) -> callable:
     def _pypi_reference_role(
         role: str,
         rawtext: str,
@@ -58,7 +72,12 @@ def pypi_reference_role(options: VerifyOptions) -> callable:
             title = matched.group("title")
             target = matched.group("target")
         project = Project.parse(target)
-        return [nodes.reference(rawtext, title, refuri=project.url, **options)], messages
+        messages = project.verify(verify_options)
+        for msg in messages:
+            warnings.warn(msg)
+        return [
+            nodes.reference(rawtext, title, refuri=project.url, **options)
+        ], messages
 
     return _pypi_reference_role
 
@@ -73,4 +92,3 @@ def bootstrap():
         "Use `rst_pypi_ref.core.configure` istead of it."
     )
     configure(VerifyOptions())
-
