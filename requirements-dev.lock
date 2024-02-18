@@ -37,6 +37,7 @@ markupsafe==2.1.5
     # via jinja2
 packaging==23.2
     # via pytest
+    # via rst-pypi-ref
     # via sphinx
 pluggy==1.4.0
     # via pytest

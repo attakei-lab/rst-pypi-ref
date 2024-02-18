@@ -1,4 +1,5 @@
 """Core module."""
+import importlib
 import re
 import warnings
 from dataclasses import dataclass
@@ -34,6 +35,13 @@ class Project:
 
     def verify(self, options: "VerifyOptions") -> List[str]:
         result = []
+        if options.strict_version and self.version:
+            from packaging.version import InvalidVersion, Version
+
+            try:
+                Version(self.version)
+            except InvalidVersion:
+                result.append(f"'{self}' includes invalid version text.")
         if options.ref_pypi_site:
             try:
                 msg = f"'{self}' is not found in PyPI."
@@ -54,6 +62,15 @@ class VerifyOptions:
 
 
 def pypi_reference_role(verify_options: VerifyOptions) -> callable:
+    if verify_options.strict_version:
+        try:
+            importlib.import_module("packaging")
+        except ImportError:
+            warnings.warn(
+                "When use strict_version options, require `packaging`."
+                "Please run `pip install 'rst-pypi-ref[strict]'"
+            )
+
     def _pypi_reference_role(
         role: str,
         rawtext: str,

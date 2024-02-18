@@ -36,6 +36,9 @@ requires-python = ">= 3.9"
 sphinx = [
     "sphinx",
 ]
+strict = [
+    "packaging",
+]
 
 [project.urls]
 Home = "https://github.com/attakei-lab/rst-pypi-ref"
