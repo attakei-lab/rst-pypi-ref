@@ -23,14 +23,14 @@ class TestForPyPiReferenceRole:
         assert node["refuri"] == "https://pypi.org/project/docutils/"
 
 
-class TestForBuildPackageUrl:
+class TestForProject:
     def test_name_only(self):
-        url = core.build_package_url("docutils")
-        assert url == "https://pypi.org/project/docutils/"
+        project = core.Project(name="docutils")
+        assert project.url == "https://pypi.org/project/docutils/"
 
     def test_with_version(self):
-        url = core.build_package_url("docutils==0.1.0")
-        assert url == "https://pypi.org/project/docutils/0.1.0/"
+        project = core.Project(name="docutils", version="0.1.0")
+        assert project.url == "https://pypi.org/project/docutils/0.1.0/"
 
 
 class TestForParse:
