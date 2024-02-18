@@ -2,8 +2,9 @@
 """Local work-check endpoint."""
 from docutils.core import publish_cmdline
 
-from rst_pypi_ref.core import bootstrap
+from rst_pypi_ref.core import VerifyOptions, configure
 
 if __name__ == "__main__":
-    bootstrap()
+    options = VerifyOptions()
+    configure(options)
     publish_cmdline()

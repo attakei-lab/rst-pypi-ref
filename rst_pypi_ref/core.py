@@ -1,5 +1,6 @@
 """Core module."""
 import re
+import warnings
 from dataclasses import dataclass
 from typing import List, Optional
 
@@ -30,26 +31,46 @@ class Project:
         return url
 
 
-def pypi_reference_role(
-    role: str,
-    rawtext: str,
-    text: str,
-    lineno: int,
-    inliner: Inliner,
-    options: Optional[dict] = None,
-    content: Optional[List[str]] = None,
-):
-    """Parse ``pypi`` role."""
-    options = roles.normalized_role_options(options)
-    messages = []
-    title = target = text
-    matched = re.match(r"^(?P<title>.+) <(?P<target>.+)>$", text)
-    if matched:
-        title = matched.group("title")
-        target = matched.group("target")
-    project = Project.parse(target)
-    return [nodes.reference(rawtext, title, refuri=project.url, **options)], messages
+@dataclass
+class VerifyOptions:
+    strict_version: bool = False
+    """Strict verify version text by packaging."""
+    ref_pypi_site: bool = False
+    """Strict verify from PyPI site (check if exists)."""
+
+
+def pypi_reference_role(options: VerifyOptions) -> callable:
+    def _pypi_reference_role(
+        role: str,
+        rawtext: str,
+        text: str,
+        lineno: int,
+        inliner: Inliner,
+        options: Optional[dict] = None,
+        content: Optional[List[str]] = None,
+    ):
+        """Parse ``pypi`` role."""
+        options = roles.normalized_role_options(options)
+        messages = []
+        title = target = text
+        matched = re.match(r"^(?P<title>.+) <(?P<target>.+)>$", text)
+        if matched:
+            title = matched.group("title")
+            target = matched.group("target")
+        project = Project.parse(target)
+        return [nodes.reference(rawtext, title, refuri=project.url, **options)], messages
+
+    return _pypi_reference_role
+
+
+def configure(options: VerifyOptions):
+    roles.register_canonical_role("pypi", pypi_reference_role(options))
 
 
 def bootstrap():
-    roles.register_canonical_role("pypi", pypi_reference_role)
+    warnings.warn(
+        "`rst_pypi_ref.core.bootstrap` is deprecated."
+        "Use `rst_pypi_ref.core.configure` istead of it."
+    )
+    configure(VerifyOptions())
+

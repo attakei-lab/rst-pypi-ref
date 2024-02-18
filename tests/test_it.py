@@ -7,7 +7,8 @@ from rst_pypi_ref import core
 
 class TestForPyPiReferenceRole:
     def test_name_only(self):
-        nodes, messages = core.pypi_reference_role(
+        pypi_reference_role = core.pypi_reference_role(core.VerifyOptions())
+        nodes, messages = pypi_reference_role(
             "pypi", ":pypi:`docutils`", "docutils", 0, None
         )
         assert len(nodes) == 1
@@ -15,7 +16,8 @@ class TestForPyPiReferenceRole:
         assert node["refuri"] == "https://pypi.org/project/docutils/"
 
     def test_title_and_target(self):
-        nodes, messages = core.pypi_reference_role(
+        pypi_reference_role = core.pypi_reference_role(core.VerifyOptions())
+        nodes, messages = pypi_reference_role(
             "pypi", ":pypi:`PyPI Link <docutils>`", "PyPI Link <docutils>", 0, None
         )
         assert len(nodes) == 1

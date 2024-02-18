@@ -1,13 +1,18 @@
 """Sphinx extension handler module."""
-from docutils.parsers.rst import roles
 from sphinx.application import Sphinx
+from sphinx.config import Config
 
 from . import __version__
-from .core import pypi_reference_role
+from .core import VerifyOptions, configure
+
+
+def register_roles(app: Sphinx, config: Config):
+    options = VerifyOptions()
+    configure(options)
 
 
 def setup(app: Sphinx):
-    roles.register_canonical_role("pypi", pypi_reference_role)
+    app.connect("config-inited", register_roles)
     return {
         "version": __version__,
         "env_version": 1,
