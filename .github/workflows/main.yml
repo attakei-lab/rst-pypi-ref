@@ -36,4 +36,5 @@ jobs:
           uv pip install -r requirements-dev.lock
       - name: Run test
         run: |
-          .venv/bin/pytest
+          source .venv/bin/activate
+          pytest
