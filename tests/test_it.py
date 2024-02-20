@@ -1,4 +1,6 @@
 """Test cases for core behaiviors."""
+import subprocess
+
 import pytest
 from docutils import nodes
 from docutils.core import publish_doctree
@@ -24,15 +26,6 @@ class TestForPyPiReferenceRole:
         assert len(nodes) == 1
         node = nodes[0]
         assert node["refuri"] == "https://pypi.org/project/docutils/"
-
-    def test_name_with_ref_pypi_site(self):
-        options = core.VerifyOptions(ref_pypi_site=True)
-        pypi_reference_role = core.pypi_reference_role(options)
-        with pytest.warns(UserWarning):
-            nodes, messages = pypi_reference_role("pypi", ":pypi:`z`", "z", 0, None)
-        assert len(nodes) == 1
-        node = nodes[0]
-        assert node["refuri"] == "https://pypi.org/project/z/"
 
 
 class TestForProject:
@@ -99,3 +92,33 @@ class TestForParse:
         refs = list(doctree.findall(nodes.reference))
         assert len(refs) == 1
         assert refs[0]["refuri"] == "https://pypi.org/project/docutils/0.3/"
+
+
+class TestForInvalidRoleByCli:
+    """Test cases for invalid source pattern."""
+
+    def test_ref_pypi_site(self):
+        """CLI I/O test for --ref-pypi-site"""
+        source = ":pypi:`z`"
+        expected = (
+            "\n".join(
+                [
+                    # "<stdin>:1: (WARNING/2) 'z' is not found in PyPI.",
+                    '<document source="<stdin>">',
+                    "    <paragraph>",
+                    '        <problematic ids="problematic-1" refid="system-message-1">',  # noqa
+                    "            :pypi:`z`",
+                    '    <system_message backrefs="problematic-1" ids="system-message-1" level="2" line="1" source="<stdin>" type="WARNING">',  # noqa
+                    "        <paragraph>",
+                    "            'z' is not found in PyPI.",
+                ]
+            )
+            + "\n"
+        )
+        proc = subprocess.run(
+            ["python", "-m", "rst_pypi_ref.cli", "--ref-pypi-site"],
+            input=source.encode(),
+            stdout=subprocess.PIPE,
+        )
+        assert proc.returncode == 0
+        assert proc.stdout == expected.encode()

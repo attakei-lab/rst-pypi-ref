@@ -33,6 +33,9 @@ class Project:
             url += f"{self.version}/"
         return url
 
+    def __repr__(self):  # noqa: D105
+        return f"{self.name}=={self.version}" if self.version is not None else self.name
+
     def verify(self, options: "VerifyOptions") -> List[str]:
         result = []
         if options.strict_version and self.version:
@@ -90,8 +93,16 @@ def pypi_reference_role(verify_options: VerifyOptions) -> callable:
             target = matched.group("target")
         project = Project.parse(target)
         messages = project.verify(verify_options)
-        for msg in messages:
-            warnings.warn(msg)
+        if messages:
+            errors = []
+            problems = []
+            for msg in messages:
+                warnings.warn(msg)
+                err = inliner.reporter.warning(msg, line=lineno)
+                prb = inliner.problematic(rawtext, rawtext, err)
+                errors.append(err)
+                problems.append(prb)
+            return problems, errors
         return [
             nodes.reference(rawtext, title, refuri=project.url, **options)
         ], messages
