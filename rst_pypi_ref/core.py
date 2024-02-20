@@ -97,7 +97,6 @@ def pypi_reference_role(verify_options: VerifyOptions) -> callable:
             errors = []
             problems = []
             for msg in messages:
-                warnings.warn(msg)
                 err = inliner.reporter.warning(msg, line=lineno)
                 prb = inliner.problematic(rawtext, rawtext, err)
                 errors.append(err)
