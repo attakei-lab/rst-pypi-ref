@@ -2,6 +2,17 @@
 Changelog
 =========
 
+ver 0.4.0
+=========
+
+:date: 2024-02-22 (JST)
+
+* Add "strict" verify options
+
+  * ``--strict-version`` mode check that text is based on rule of ``packaging`` library.
+  * ``--ref-pypi-site`` mode check that is exists on PyPI site.
+  * These options are accepted in sphinx-extension.
+
 ver 0.3.1
 =========
 
